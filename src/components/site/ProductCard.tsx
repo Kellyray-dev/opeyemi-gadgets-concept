@@ -53,12 +53,10 @@ export function ProductCard({ product }: { product: Product }) {
             ))}
           </div>
         </div>
-        {product.category !== "MacBook" || true ? (
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <BatteryMedium className="h-4 w-4 shrink-0" />
             Battery health: tested &amp; confirmed per unit
-          </p>
-        ) : null}
+        </p>
         <p className="text-xs text-muted-foreground">
           {product.seenInInventory
             ? "Seen in recent shop stock photos — confirm availability"
