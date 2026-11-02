@@ -137,7 +137,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             ))}
           </div>
         </div>
-        <div className="border-t px-4 py-4 text-center text-xs text-muted-foreground">
+        <div className="border-t px-4 pb-24 pt-4 text-center text-xs md:pb-4 text-muted-foreground">
           © {new Date().getFullYear()} {BUSINESS.name} · Independent concept, not officially
           commissioned · Website Concept &amp; Design by{" "}
           <span className="font-semibold tracking-wider">KELLYRAY / STUDIO</span>

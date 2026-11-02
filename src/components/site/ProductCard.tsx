@@ -6,8 +6,8 @@ import { cart } from "@/lib/cart";
 import { WhatsAppButton } from "./Layout";
 
 export function ProductCard({ product }: { product: Product }) {
-  const [storage, setStorage] = useState(product.storage[0]);
-  const [condition, setCondition] = useState(product.conditions[0]);
+  const [storage, setStorage] = useState<string>(product.storage[0] ?? "");
+  const [condition, setCondition] = useState<string>(product.conditions[0] ?? "New");
   const [added, setAdded] = useState(false);
   const sizeLabel = product.category === "Apple Watch" ? "Case size" : "Storage";
 
