@@ -1,7 +1,22 @@
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, Menu, X } from "lucide-react";
+import { MessageCircle, Menu, X, ShoppingBag } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { BUSINESS, whatsappLink } from "@/lib/business";
+import { useCart } from "@/lib/cart";
+
+function CartLink() {
+  const count = useCart().reduce((n, i) => n + i.qty, 0);
+  return (
+    <Link to="/checkout" aria-label={`Your order (${count} items)`} className="relative rounded-md p-2 text-primary">
+      <ShoppingBag className="h-6 w-6" />
+      {count > 0 && (
+        <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-maroon px-1 text-[10px] font-bold text-primary-foreground">
+          {count}
+        </span>
+      )}
+    </Link>
+  );
+}
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -71,14 +86,18 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               </Link>
             ))}
             <WhatsAppButton className="px-4 py-2">WhatsApp</WhatsAppButton>
+            <CartLink />
           </nav>
+          <div className="flex items-center gap-1 md:hidden">
+          <CartLink />
           <button
             aria-label={open ? "Close menu" : "Open menu"}
-            className="rounded-md p-2 md:hidden"
+            className="rounded-md p-2"
             onClick={() => setOpen(!open)}
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
+          </div>
         </div>
         {open && (
           <nav className="flex flex-col gap-1 border-t px-4 py-3 md:hidden">
@@ -118,7 +137,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             ))}
           </div>
         </div>
-        <div className="border-t px-4 py-4 text-center text-xs text-muted-foreground">
+        <div className="border-t px-4 pb-24 pt-4 text-center text-xs md:pb-4 text-muted-foreground">
           © {new Date().getFullYear()} {BUSINESS.name} · Independent concept, not officially
           commissioned · Website Concept &amp; Design by{" "}
           <span className="font-semibold tracking-wider">KELLYRAY / STUDIO</span>
