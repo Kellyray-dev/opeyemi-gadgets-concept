@@ -1,3 +1,12 @@
+import phonePro from "@/assets/products/phone-pro-titanium.jpg";
+import phoneColor from "@/assets/products/phone-standard-color.jpg";
+import phoneClassic from "@/assets/products/phone-pro-classic.jpg";
+import phoneOlder from "@/assets/products/phone-older.jpg";
+import laptopAir from "@/assets/products/laptop-air.jpg";
+import laptopPro from "@/assets/products/laptop-pro.jpg";
+import watchSeries from "@/assets/products/watch-series.jpg";
+import watchUltra from "@/assets/products/watch-ultra.jpg";
+
 export type Category = "iPhone" | "MacBook" | "Apple Watch";
 export type Condition = "New" | "UK Used";
 
@@ -12,6 +21,10 @@ export interface Product {
   price: number | null;
   /** True when the model appears in the business's own inventory photo. */
   seenInInventory: boolean;
+  /** Preview-only illustrative photo; replace with the shop's real photos. */
+  image: string;
+  /** Latest model generation — shown in "New In". Not a stock claim. */
+  isNew: boolean;
 }
 
 // No prices were supplied, so every price is null ("Request Price").
@@ -23,6 +36,10 @@ const iphone = (
   storage: string[],
   seen = false,
 ): Product => ({
+  image: /Pro/.test(name)
+    ? /1[56]/.test(family) ? phonePro : phoneClassic
+    : /1[56]/.test(family) ? phoneColor : phoneOlder,
+  isNew: /1[56]/.test(family),
   id,
   name,
   category: "iPhone",
@@ -48,6 +65,8 @@ export const PRODUCTS: Product[] = [
   iphone("iphone-xr", "iPhone XR", "X Series", ["64GB", "128GB", "256GB"], true),
   {
     id: "macbook-air-m2",
+    image: laptopAir,
+    isNew: false,
     name: "MacBook Air (M2)",
     category: "MacBook",
     conditions: ["New", "UK Used"],
@@ -58,6 +77,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "macbook-pro-14",
+    image: laptopPro,
+    isNew: false,
     name: 'MacBook Pro 14"',
     category: "MacBook",
     conditions: ["New", "UK Used"],
@@ -68,6 +89,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "watch-series-9",
+    image: watchSeries,
+    isNew: false,
     name: "Apple Watch Series 9",
     category: "Apple Watch",
     conditions: ["New", "UK Used"],
@@ -78,6 +101,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "watch-ultra-2",
+    image: watchUltra,
+    isNew: true,
     name: "Apple Watch Ultra 2",
     category: "Apple Watch",
     conditions: ["New", "UK Used"],
@@ -102,3 +127,9 @@ export function filterProducts(
       (!q || p.name.toLowerCase().includes(q)),
   );
 }
+
+export const CATEGORY_INFO: Record<Category, { image: string; blurb: string }> = {
+  iPhone: { image: phonePro, blurb: "XR to 16 Pro Max" },
+  MacBook: { image: laptopPro, blurb: "Air & Pro" },
+  "Apple Watch": { image: watchSeries, blurb: "Series & Ultra" },
+};
