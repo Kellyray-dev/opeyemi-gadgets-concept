@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { CATEGORIES, PRODUCTS, filterProducts, type Category, type Condition } from "@/lib/catalog";
@@ -14,6 +15,10 @@ export const Route = createFileRoute("/shop")({
       { property: "og:description", content: "New & UK used Apple devices with nationwide delivery in Nigeria." },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { category?: Category | "All" } => {
+    const c = s.category as string | undefined;
+    return c && (c === "All" || (CATEGORIES as string[]).includes(c)) ? { category: c as Category | "All" } : {};
+  },
   component: Shop,
 });
 
@@ -29,7 +34,10 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
 }
 
 function Shop() {
-  const [category, setCategory] = useState<Category | "All">("iPhone");
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const category = search.category ?? "All";
+  const setCategory = (c: Category | "All") => navigate({ search: { category: c }, replace: true });
   const [condition, setCondition] = useState<Condition | "All">("All");
   const [q, setQ] = useState("");
   const list = useMemo(() => filterProducts(PRODUCTS, { category, condition, q }), [category, condition, q]);
@@ -39,8 +47,9 @@ function Shop() {
       <section className="mx-auto max-w-6xl px-4 py-10">
         <h1 className="font-display text-4xl font-bold">Shop</h1>
         <p className="mt-2 text-muted-foreground">
-          Prices change with stock — tap any device to request the current price on WhatsApp.
+          Prices change with stock — add devices to your order or buy instantly on WhatsApp.
         </p>
+        <p className="mt-1 text-xs text-muted-foreground">Preview photos are illustrative. <Link to="/checkout" className="font-semibold text-primary">View your order →</Link></p>
 
         <div className="mt-6 space-y-3">
           <label className="flex items-center gap-2 rounded-full border bg-card px-4 py-2.5">

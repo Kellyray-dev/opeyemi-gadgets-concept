@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Truck, Repeat, BadgeCheck, ArrowRight } from "lucide-react";
 import hero from "@/assets/hero.jpg";
-import inventory from "@/assets/inventory.png.asset.json";
 import { SiteLayout, WhatsAppButton } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
-import { PRODUCTS } from "@/lib/catalog";
+import { PRODUCTS, CATEGORIES, CATEGORY_INFO } from "@/lib/catalog";
 import { BUSINESS } from "@/lib/business";
 
 export const Route = createFileRoute("/")({
@@ -27,7 +26,7 @@ const TRUST = [
 ];
 
 function Index() {
-  const featured = PRODUCTS.filter((p) => p.category === "iPhone").slice(0, 6);
+  const newIn = PRODUCTS.filter((p) => p.isNew).slice(0, 6);
   return (
     <SiteLayout>
       <section className="relative overflow-hidden bg-primary text-primary-foreground">
@@ -44,7 +43,7 @@ function Index() {
             iPhones, MacBooks and Apple Watches — we buy, we sell, we swap.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/shop" className="inline-flex items-center gap-2 rounded-full bg-background px-5 py-3 text-sm font-semibold text-primary">
+            <Link to="/shop" search={{ category: "iPhone" }} className="inline-flex items-center gap-2 rounded-full bg-background px-5 py-3 text-sm font-semibold text-primary">
               Browse iPhones <ArrowRight className="h-4 w-4" />
             </Link>
             <WhatsAppButton message="Hello Opeyemi Phone & Gadgets, I'd like to make an enquiry." />
@@ -63,29 +62,36 @@ function Index() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-12">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="font-display text-3xl font-bold">Popular iPhones</h2>
-          <Link to="/shop" className="shrink-0 text-sm font-semibold text-primary">View all →</Link>
-        </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+        <h2 className="font-display text-3xl font-bold">Shop by category</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {CATEGORIES.map((c) => (
+            <Link
+              key={c}
+              to="/shop"
+              search={{ category: c }}
+              className="group flex items-center gap-4 overflow-hidden rounded-2xl border bg-card p-3 transition hover:shadow-md sm:flex-col sm:items-stretch sm:p-0"
+            >
+              <img src={CATEGORY_INFO[c].image} alt={`${c} (illustrative)`} loading="lazy" width={816} height={816} className="h-20 w-20 rounded-xl object-cover sm:aspect-[4/3] sm:h-auto sm:w-full sm:rounded-none" />
+              <div className="sm:p-4">
+                <p className="font-display text-lg font-bold">{c}</p>
+                <p className="text-sm text-muted-foreground">{CATEGORY_INFO[c].blurb}</p>
+                <p className="mt-1 text-sm font-semibold text-primary">Browse →</p>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="bg-secondary">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 md:grid-cols-2">
-          <img src={inventory.url} alt="Recent iPhone stock laid out at the shop" loading="lazy" className="mx-auto max-h-[480px] rounded-2xl object-cover shadow-lg" />
+      <section className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-brand-maroon">From the shop</p>
-            <h2 className="mt-2 font-display text-3xl font-bold">Real stock, real photos.</h2>
-            <p className="mt-3 text-muted-foreground">
-              A recent batch shared by the shop — iPhone XR through 13 Pro Max in many colours.
-              Stock moves fast, so confirm the exact model, storage and battery health on WhatsApp.
-            </p>
-            <WhatsAppButton className="mt-6" message="Hello, which iPhones do you have available today?">
-              Ask what's available today
-            </WhatsAppButton>
+            <p className="text-sm font-semibold text-brand-maroon">Latest models</p>
+            <h2 className="font-display text-3xl font-bold">New In</h2>
           </div>
+          <Link to="/shop" search={{ category: "All" }} className="shrink-0 text-sm font-semibold text-primary">View all →</Link>
+        </div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {newIn.map((p) => <ProductCard key={p.id} product={p} />)}
         </div>
       </section>
 
