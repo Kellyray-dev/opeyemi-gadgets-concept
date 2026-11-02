@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Business facts (phone, BN, WhatsApp link builder, Naira formatting) live in src/lib/business.ts and products in src/lib/catalog.ts — single source so pages never hardcode contact info or prices.
+- Order basket lives in src/lib/cart.ts (client store + localStorage); checkout never sends data or takes payment — preview only, WhatsApp link opens on tap.
