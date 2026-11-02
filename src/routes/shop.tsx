@@ -16,7 +16,7 @@ export const Route = createFileRoute("/shop")({
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { category?: Category | "All" } => {
-    const c = s.category as string | undefined;
+    const c = s["category"] as string | undefined;
     return c && (c === "All" || (CATEGORIES as string[]).includes(c)) ? { category: c as Category | "All" } : {};
   },
   component: Shop,

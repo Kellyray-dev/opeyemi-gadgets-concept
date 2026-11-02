@@ -69,7 +69,7 @@ export function useCart(): CartItem[] {
 }
 
 /** WhatsApp order message. Prices are never included — the shop confirms them. */
-export function orderMessage(list: CartItem[], customer?: { name?: string; state?: string; delivery?: string }): string {
+export function orderMessage(list: CartItem[], customer?: { name?: string | undefined; state?: string | undefined; delivery?: string | undefined }): string {
   const lines = list.map((i, n) => `${n + 1}. ${i.name} — ${i.option}, ${i.condition} × ${i.qty}`);
   const extra = [
     customer?.name && `Name: ${customer.name}`,

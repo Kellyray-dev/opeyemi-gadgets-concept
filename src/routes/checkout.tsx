@@ -19,14 +19,14 @@ export const Route = createFileRoute("/checkout")({
   component: Checkout,
 });
 
-const DELIVERY = ["Doorstep delivery (nationwide)", "Pick up from shop"];
+const DELIVERY: string[] = ["Doorstep delivery (nationwide)", "Pick up from shop"];
 
 function Checkout() {
   const items = useCart();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [state, setState] = useState("");
-  const [delivery, setDelivery] = useState(DELIVERY[0]);
+  const [delivery, setDelivery] = useState<string>(DELIVERY[0] ?? "");
   const [done, setDone] = useState(false);
   const msg = orderMessage(items, { name, state, delivery });
 
