@@ -1,5 +1,6 @@
 import { BatteryMedium, ShoppingBag, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/catalog";
 import { formatNaira } from "@/lib/business";
 import { cart } from "@/lib/cart";
@@ -9,86 +10,92 @@ export function ProductCard({ product }: { product: Product }) {
   const [storage, setStorage] = useState<string>(product.storage[0] ?? "");
   const [condition, setCondition] = useState<string>(product.conditions[0] ?? "New");
   const [added, setAdded] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
   const sizeLabel = product.category === "Apple Watch" ? "Case size" : "Storage";
 
   const add = () => {
     cart.add({ productId: product.id, name: product.name, option: storage, condition });
     setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setAdded(false), 1500);
   };
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition hover:shadow-md">
-      <div className="relative aspect-square bg-muted">
+    <article className="flex min-w-0 flex-col overflow-hidden rounded-lg border bg-card shadow-sm">
+      <div className="relative aspect-[4/3] bg-muted sm:aspect-square">
         <img
           src={product.image}
           alt={`${product.name} (illustrative photo)`}
           loading="lazy"
+          decoding="async"
           width={816}
           height={816}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain p-6"
         />
         {product.isNew && (
           <span className="absolute left-3 top-3 rounded-full bg-brand-gold px-2.5 py-1 text-xs font-bold text-foreground">
-            New In
+            Featured
           </span>
         )}
-        <span className="absolute right-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-xs text-muted-foreground">
+        <span className="absolute right-3 top-3 rounded-md bg-background/95 px-2.5 py-1 text-xs text-muted-foreground">
           {product.family}
         </span>
       </div>
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-lg font-bold">{product.name}</h3>
-        <p className="font-semibold text-brand-maroon">{formatNaira(product.price)}</p>
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <h3 className="font-display text-xl font-bold leading-snug">{product.name}</h3>
+        <p className="mt-1 font-semibold text-primary">{formatNaira(product.price)}</p>
 
         <div className="mt-4 space-y-3 text-sm">
           <div>
             <p className="mb-1.5 text-xs font-medium text-muted-foreground">{sizeLabel}</p>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2" role="group" aria-label={`${product.name} ${sizeLabel}`}>
               {product.storage.map((s) => (
-                <button
+                <Button variant="outline"
                   key={s}
+                  aria-pressed={s === storage}
                   onClick={() => setStorage(s)}
-                  className={`rounded-md border px-2.5 py-1 text-xs ${s === storage ? "border-primary bg-primary text-primary-foreground" : "hover:border-primary"}`}
+                  className={`min-h-11 px-3 text-sm ${s === storage ? "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" : "hover:border-primary"}`}
                 >
                   {s}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
           <div>
-            <p className="mb-1.5 text-xs font-medium text-muted-foreground">Condition</p>
-            <div className="flex flex-wrap gap-1.5">
+            <p className="mb-1.5 text-xs font-medium text-muted-foreground">Preferred condition</p>
+            <div className="flex flex-wrap gap-2" role="group" aria-label={`${product.name} preferred condition`}>
               {product.conditions.map((c) => (
-                <button
+                <Button variant="outline"
                   key={c}
+                  aria-pressed={c === condition}
                   onClick={() => setCondition(c)}
-                  className={`rounded-md border px-2.5 py-1 text-xs ${c === condition ? "border-primary bg-primary text-primary-foreground" : "hover:border-primary"}`}
+                  className={`min-h-11 px-3 text-sm ${c === condition ? "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" : "hover:border-primary"}`}
                 >
                   {c}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <BatteryMedium className="h-4 w-4 shrink-0" />
-            Battery health: tested &amp; confirmed per unit
+            Ask about battery health and availability
           </p>
         </div>
 
         <div className="mt-auto grid gap-2 pt-5">
-          <button
+          <Button variant="outline"
             onClick={add}
-            className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
+            className="min-h-12 w-full border-primary text-primary"
           >
             {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
-            {added ? "Added to order" : "Add to order"}
-          </button>
+            <span role="status" aria-live="polite">{added ? "Added to order" : "Add to order"}</span>
+          </Button>
           <WhatsAppButton
             className="w-full"
             message={`Hello Opeyemi Phone & Gadgets, I'm interested in the ${product.name} (${storage}, ${condition}). Is it available and what's the price?`}
           >
-            Buy via WhatsApp
+            Enquire on WhatsApp
           </WhatsAppButton>
         </div>
       </div>
