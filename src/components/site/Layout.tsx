@@ -1,13 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, Menu, X, ShoppingBag } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { MessageCircle, Menu, ShoppingBag } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { BUSINESS, whatsappLink } from "@/lib/business";
 import { useCart } from "@/lib/cart";
 
 function CartLink() {
   const count = useCart().reduce((n, i) => n + i.qty, 0);
   return (
-    <Link to="/checkout" aria-label={`Your order (${count} items)`} className="relative rounded-md p-2 text-primary">
+    <Link to="/checkout" aria-label={`Your order (${count} items)`} className="relative grid min-h-11 min-w-11 place-items-center rounded-md text-primary">
       <ShoppingBag className="h-6 w-6" />
       {count > 0 && (
         <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand-maroon px-1 text-[10px] font-bold text-primary-foreground">
@@ -35,15 +37,16 @@ export function WhatsAppButton({
   className?: string;
 }) {
   return (
+    <Button asChild className={`h-auto min-h-11 whitespace-normal bg-whatsapp px-4 py-3 text-whatsapp-foreground hover:bg-whatsapp/90 ${className}`}>
     <a
       href={whatsappLink(message)}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2 rounded-full bg-whatsapp px-5 py-3 text-sm font-semibold text-whatsapp-foreground shadow-md transition hover:brightness-110 ${className}`}
     >
       <MessageCircle className="h-4 w-4 shrink-0" />
       {children}
     </a>
+    </Button>
   );
 }
 
@@ -65,9 +68,16 @@ function Logo() {
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = () => { if (media.matches) setOpen(false); };
+    media.addEventListener("change", closeOnDesktop);
+    return () => media.removeEventListener("change", closeOnDesktop);
+  }, []);
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <div className="bg-primary px-4 py-1.5 text-center text-xs text-primary-foreground">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-background focus:p-3 focus:text-primary">Skip to content</a>
+      <div className="bg-primary px-4 py-2 text-center text-xs leading-relaxed text-primary-foreground">
         Concept demo by KELLYRAY / STUDIO — not the official business website
       </div>
       <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
@@ -90,43 +100,34 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </nav>
           <div className="flex items-center gap-1 md:hidden">
           <CartLink />
-          <button
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="rounded-md p-2"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+           <Sheet open={open} onOpenChange={setOpen}>
+             <SheetTrigger asChild><Button variant="ghost" size="icon" className="min-h-11 min-w-11" aria-label="Open menu"><Menu /></Button></SheetTrigger>
+             <SheetContent className="w-[min(88vw,360px)] overflow-y-auto pt-16">
+               <SheetTitle className="font-display text-2xl">Opeyemi</SheetTitle>
+               <SheetDescription>Phone &amp; Gadgets · Independent concept</SheetDescription>
+               <nav aria-label="Mobile navigation" className="mt-8 flex flex-col gap-2">
+                 {NAV.map((n) => <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="rounded-md px-3 py-3 font-semibold hover:bg-accent" activeOptions={{ exact: true }} activeProps={{ className: "bg-accent text-primary" }}>{n.label}</Link>)}
+                 <Link to="/checkout" onClick={() => setOpen(false)} className="rounded-md px-3 py-3 font-semibold hover:bg-accent">Your order</Link>
+               </nav>
+               <WhatsAppButton className="mt-8 w-full" />
+             </SheetContent>
+           </Sheet>
           </div>
         </div>
-        {open && (
-          <nav className="flex flex-col gap-1 border-t px-4 py-3 md:hidden">
-            {NAV.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2.5 font-medium hover:bg-muted"
-              >
-                {n.label}
-              </Link>
-            ))}
-          </nav>
-        )}
       </header>
-      <main className="flex-1">{children}</main>
+      <main id="main-content" tabIndex={-1} className="min-w-0 flex-1">{children}</main>
       <footer className="border-t bg-secondary">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3">
           <div>
             <Logo />
             <p className="mt-3 text-sm text-muted-foreground">
-              New &amp; UK used gadgets. We buy, we sell, we swap. Nationwide delivery.
+              iPhones &amp; gadgets. Buy, sell and swap enquiries. All devices shown are concept examples, not confirmed stock.
             </p>
           </div>
           <div className="text-sm">
             <p className="font-semibold">Contact</p>
             <p className="mt-2 text-muted-foreground">Call / WhatsApp: {BUSINESS.phoneDisplay}</p>
-            <p className="text-muted-foreground">CAC: {BUSINESS.bn}</p>
+             <p className="text-muted-foreground">Business-supplied reference: {BUSINESS.bn} (not independently verified)</p>
           </div>
           <div className="flex flex-col gap-1.5 text-sm">
             <p className="font-semibold">Explore</p>

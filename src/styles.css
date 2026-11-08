@@ -68,7 +68,7 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.5rem;
   --background: oklch(0.985 0.005 265);
   --foreground: oklch(0.2 0.05 268);
   --card: oklch(1 0 0);
@@ -83,7 +83,7 @@
   --muted-foreground: oklch(0.5 0.04 265);
   --accent: oklch(0.93 0.04 265);
   --accent-foreground: oklch(0.3 0.15 266);
-  --whatsapp: oklch(0.62 0.17 150);
+  --whatsapp: oklch(0.48 0.14 150);
   --whatsapp-foreground: oklch(0.99 0 0);
   --brand-maroon: oklch(0.38 0.12 25);
   --brand-gold: oklch(0.84 0.15 80);
@@ -155,5 +155,16 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    letter-spacing: 0;
   }
+  :where(a, button, input, textarea):focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+  input, textarea { font-size: 16px; }
+  input::placeholder, textarea::placeholder { color: var(--muted-foreground); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
