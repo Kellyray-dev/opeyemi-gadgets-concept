@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { CATEGORIES, PRODUCTS, filterProducts, type Category, type Condition } from "@/lib/catalog";
@@ -12,7 +13,9 @@ export const Route = createFileRoute("/shop")({
       { title: "Shop iPhones, MacBooks & Apple Watches — Opeyemi Phone & Gadgets" },
       { name: "description", content: "Browse new and UK used iPhones, MacBooks and Apple Watches. Request prices on WhatsApp." },
       { property: "og:title", content: "Shop — Opeyemi Phone & Gadgets" },
-      { property: "og:description", content: "New & UK used Apple devices with nationwide delivery in Nigeria." },
+      { property: "og:description", content: "Explore illustrative Apple device listings in this independent concept preview." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { category?: Category | "All" } => {
@@ -24,12 +27,13 @@ export const Route = createFileRoute("/shop")({
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: string }) {
   return (
-    <button
+    <Button variant="outline"
+      aria-pressed={active}
       onClick={onClick}
-      className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium ${active ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:border-primary"}`}
+      className={`min-h-11 shrink-0 px-4 ${active ? "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" : "bg-card hover:border-primary"}`}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -47,7 +51,7 @@ function Shop() {
       <section className="mx-auto max-w-6xl px-4 py-10">
         <h1 className="font-display text-4xl font-bold">Shop</h1>
         <p className="mt-2 text-muted-foreground">
-          Prices change with stock — add devices to your order or buy instantly on WhatsApp.
+          Concept listings, not confirmed stock. Request prices and availability on WhatsApp.
         </p>
         <p className="mt-1 text-xs text-muted-foreground">Preview photos are illustrative. <Link to="/checkout" className="font-semibold text-primary">View your order →</Link></p>
 
@@ -55,10 +59,11 @@ function Shop() {
           <label className="flex items-center gap-2 rounded-full border bg-card px-4 py-2.5">
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
             <input
+              aria-label="Search devices"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search e.g. 13 Pro Max"
-              className="w-full min-w-0 bg-transparent text-sm outline-none"
+              className="w-full min-w-0 bg-transparent text-base outline-none"
             />
           </label>
           <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
@@ -75,7 +80,7 @@ function Shop() {
           </div>
         </div>
 
-        <p className="mt-6 text-sm text-muted-foreground">{list.length} devices</p>
+         <p role="status" aria-live="polite" className="mt-6 text-sm text-muted-foreground">{list.length} devices</p>
         <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((p) => <ProductCard key={p.id} product={p} />)}
         </div>

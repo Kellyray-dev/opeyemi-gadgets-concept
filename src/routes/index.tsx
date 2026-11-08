@@ -1,27 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShieldCheck, Truck, Repeat, BadgeCheck, ArrowRight } from "lucide-react";
+import { ShieldCheck, Truck, Repeat, MessageCircle, ArrowRight } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import { SiteLayout, WhatsAppButton } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { PRODUCTS, CATEGORIES, CATEGORY_INFO } from "@/lib/catalog";
-import { BUSINESS } from "@/lib/business";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Opeyemi Phone & Gadgets — New & UK Used iPhones in Nigeria" },
-      { name: "description", content: "Buy, sell and swap iPhones, MacBooks and Apple Watches. New & UK used, nationwide delivery. WhatsApp 09030393902." },
+      { name: "description", content: "Independent Opeyemi Phone & Gadgets concept preview. Explore iPhones, MacBooks, Apple Watches and swap enquiries." },
       { property: "og:title", content: "Opeyemi Phone & Gadgets — We Buy, We Sell, We Swap" },
-      { property: "og:description", content: "Quality new & UK used iPhones and gadgets with nationwide delivery across Nigeria." },
+      { property: "og:description", content: "A private design concept featuring Apple devices and WhatsApp enquiries, not confirmed inventory." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
 });
 
 const TRUST = [
-  { icon: BadgeCheck, title: "CAC Registered", text: BUSINESS.bn },
-  { icon: ShieldCheck, title: "New & UK Used", text: "Condition stated clearly" },
-  { icon: Truck, title: "Nationwide Delivery", text: "Anywhere in Nigeria" },
+  { icon: MessageCircle, title: "Price enquiries", text: "Ask the shop directly" },
+  { icon: ShieldCheck, title: "New & UK Used", text: "Request your preferred condition" },
+  { icon: Truck, title: "Delivery enquiries", text: "Confirm options with the shop" },
   { icon: Repeat, title: "Buy · Sell · Swap", text: "Upgrade your old phone" },
 ];
 
@@ -30,22 +32,24 @@ function Index() {
   return (
     <SiteLayout>
       <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        <img src={hero} alt="Range of iPhones and an Apple Watch" width={1600} height={1104} className="absolute inset-0 h-full w-full object-cover opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent" />
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-28">
-          <p className="inline-block rounded-full bg-brand-gold px-3 py-1 text-xs font-bold text-foreground">
-            New &amp; UK Used · Nationwide Delivery
+        <img src={hero} alt="Illustrative gadget collection for this concept" fetchPriority="high" decoding="async" width={1600} height={1104} className="absolute inset-0 h-full w-full object-cover opacity-40" />
+        <div className="absolute inset-0 bg-primary/35" />
+        <div className="relative mx-auto max-w-6xl px-4 py-10 sm:py-16">
+          <p className="text-xs font-semibold text-primary-foreground">
+            New &amp; UK Used · Buy · Sell · Swap
           </p>
-          <h1 className="mt-5 max-w-xl font-display text-4xl font-bold leading-tight sm:text-6xl">
-            Quality gadgets at the best price.
+          <h1 className="mt-4 max-w-xl font-display text-3xl font-bold leading-tight sm:text-5xl">
+            Opeyemi Phone &amp; Gadgets
           </h1>
           <p className="mt-4 max-w-md text-primary-foreground/85">
             iPhones, MacBooks and Apple Watches — we buy, we sell, we swap.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+            <Button asChild variant="secondary" className="min-h-12">
             <Link to="/shop" search={{ category: "iPhone" }} className="inline-flex items-center gap-2 rounded-full bg-background px-5 py-3 text-sm font-semibold text-primary">
               Browse iPhones <ArrowRight className="h-4 w-4" />
             </Link>
+            </Button>
             <WhatsAppButton message="Hello Opeyemi Phone & Gadgets, I'd like to make an enquiry." />
           </div>
         </div>
@@ -53,7 +57,7 @@ function Index() {
 
       <section className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-4 py-10 md:grid-cols-4">
         {TRUST.map((t) => (
-          <div key={t.title} className="rounded-xl border bg-card p-4">
+          <div key={t.title} className="min-w-0 border-l-2 border-primary pl-3">
             <t.icon className="h-6 w-6 text-primary" />
             <p className="mt-2 text-sm font-semibold">{t.title}</p>
             <p className="text-xs text-muted-foreground">{t.text}</p>
@@ -69,9 +73,9 @@ function Index() {
               key={c}
               to="/shop"
               search={{ category: c }}
-              className="group flex items-center gap-4 overflow-hidden rounded-2xl border bg-card p-3 transition hover:shadow-md sm:flex-col sm:items-stretch sm:p-0"
+              className="group flex min-w-0 items-center gap-4 overflow-hidden rounded-lg border bg-card p-3 transition hover:shadow-md sm:flex-col sm:items-stretch sm:p-0"
             >
-              <img src={CATEGORY_INFO[c].image} alt={`${c} (illustrative)`} loading="lazy" width={816} height={816} className="h-20 w-20 rounded-xl object-cover sm:aspect-[4/3] sm:h-auto sm:w-full sm:rounded-none" />
+              <img src={CATEGORY_INFO[c].image} alt={`${c} example model`} loading="lazy" decoding="async" width={816} height={816} className="h-20 w-20 shrink-0 rounded-md object-contain sm:aspect-[4/3] sm:h-auto sm:w-full sm:rounded-none" />
               <div className="sm:p-4">
                 <p className="font-display text-lg font-bold">{c}</p>
                 <p className="text-sm text-muted-foreground">{CATEGORY_INFO[c].blurb}</p>
@@ -83,10 +87,10 @@ function Index() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-12">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-brand-maroon">Latest models</p>
-            <h2 className="font-display text-3xl font-bold">New In</h2>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-primary">Concept selection · not stock</p>
+            <h2 className="font-display text-3xl font-bold">Featured models</h2>
           </div>
           <Link to="/shop" search={{ category: "All" }} className="shrink-0 text-sm font-semibold text-primary">View all →</Link>
         </div>
@@ -100,9 +104,9 @@ function Index() {
         <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
           Got an old phone? Sell it for cash or swap it towards an upgrade.
         </p>
-        <Link to="/swap" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground">
+        <Button asChild className="mt-6 min-h-12"><Link to="/swap">
           Start a swap enquiry <ArrowRight className="h-4 w-4" />
-        </Link>
+        </Link></Button>
       </section>
     </SiteLayout>
   );

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ShoppingCart, Banknote, Repeat } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { SiteLayout, WhatsAppButton } from "@/components/site/Layout";
 
 export const Route = createFileRoute("/swap")({
@@ -10,6 +11,8 @@ export const Route = createFileRoute("/swap")({
       { name: "description", content: "Sell your phone for cash or swap it towards an upgrade. Get a quote on WhatsApp." },
       { property: "og:title", content: "Swap or Sell Your Phone — Opeyemi Phone & Gadgets" },
       { property: "og:description", content: "We buy, we sell, we swap. Start your enquiry on WhatsApp." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Swap,
@@ -50,15 +53,16 @@ function Swap() {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {MODES.map((m) => (
-            <button
+            <Button variant="outline"
               key={m.id}
+              aria-pressed={mode === m.id}
               onClick={() => setMode(m.id)}
-              className={`rounded-xl border p-4 text-left transition ${mode === m.id ? "border-primary bg-accent" : "bg-card hover:border-primary"}`}
+              className={`block h-auto whitespace-normal rounded-lg border p-4 text-left transition ${mode === m.id ? "border-primary bg-accent" : "bg-card hover:border-primary"}`}
             >
               <m.icon className="h-6 w-6 text-primary" />
               <p className="mt-2 font-semibold">{m.title}</p>
               <p className="text-xs text-muted-foreground">{m.text}</p>
-            </button>
+            </Button>
           ))}
         </div>
 

@@ -51,7 +51,7 @@ export function useCart(): CartItem[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        items = JSON.parse(raw);
+        items = parseStoredCart(raw);
         listeners.forEach((l) => l());
       }
     } catch {
@@ -69,12 +69,13 @@ export function useCart(): CartItem[] {
 }
 
 /** WhatsApp order message. Prices are never included — the shop confirms them. */
-export function orderMessage(list: CartItem[], customer?: { name?: string | undefined; state?: string | undefined; delivery?: string | undefined }): string {
+export function orderMessage(list: CartItem[], customer?: { name?: string | undefined; phone?: string | undefined; state?: string | undefined; delivery?: string | undefined }): string {
   const lines = list.map((i, n) => `${n + 1}. ${i.name} — ${i.option}, ${i.condition} × ${i.qty}`);
   const extra = [
     customer?.name && `Name: ${customer.name}`,
+    customer?.phone && `Phone: ${customer.phone}`,
     customer?.state && `Location: ${customer.state}`,
-    customer?.delivery && `Delivery: ${customer.delivery}`,
+    customer?.delivery && `Delivery preference (please confirm): ${customer.delivery}`,
   ].filter(Boolean);
   return [
     "Hello Opeyemi Phone & Gadgets, I'd like to order:",
@@ -83,4 +84,17 @@ export function orderMessage(list: CartItem[], customer?: { name?: string | unde
     "",
     "Please confirm availability, battery health and price.",
   ].join("\n");
+}
+
+/** Ignore malformed browser data rather than letting it break the preview. */
+export function parseStoredCart(raw: string): CartItem[] {
+  try {
+    const data: unknown = JSON.parse(raw);
+    if (!Array.isArray(data)) return [];
+    return data.filter((item): item is CartItem =>
+      typeof item === "object" && item !== null &&
+      ["key", "productId", "name", "option", "condition"].every((key) => typeof item[key] === "string") &&
+      Number.isSafeInteger(item.qty) && item.qty > 0,
+    );
+  } catch { return []; }
 }

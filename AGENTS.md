@@ -11,3 +11,5 @@
 
 - Business facts (phone, BN, WhatsApp link builder, Naira formatting) live in src/lib/business.ts and products in src/lib/catalog.ts — single source so pages never hardcode contact info or prices.
 - Order basket lives in src/lib/cart.ts (client store + localStorage); checkout never sends data or takes payment — preview only, WhatsApp link opens on tap.
+- Mobile navigation uses the shared Radix Sheet for focus trapping, Escape dismissal and focus restoration; avoid custom modal navigation.
+- Device media provenance belongs alongside catalog data; only licensed exact-model photography may represent a listing.
