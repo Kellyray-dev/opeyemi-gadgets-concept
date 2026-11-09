@@ -144,15 +144,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <span className="font-semibold tracking-wider">KELLYRAY / STUDIO</span>
         </div>
       </footer>
-      <a
-        href={whatsappLink()}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat on WhatsApp"
-        className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-lg md:hidden"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </a>
     </div>
   );
 }

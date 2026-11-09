@@ -53,7 +53,7 @@ function Shop() {
         <p className="mt-2 text-muted-foreground">
           Concept listings, not confirmed stock. Request prices and availability on WhatsApp.
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">Preview photos are illustrative. <Link to="/checkout" className="font-semibold text-primary">View your order →</Link></p>
+         <p className="mt-1 text-xs text-muted-foreground">Illustrative images do not verify model appearance or stock. <Link to="/checkout" className="font-semibold text-primary">View your order →</Link></p>
 
         <div className="mt-6 space-y-3">
           <label className="flex items-center gap-2 rounded-full border bg-card px-4 py-2.5">
