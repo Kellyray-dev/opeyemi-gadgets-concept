@@ -86,6 +86,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-auto grid gap-2 pt-5">
           <Button variant="outline"
             onClick={add}
+            aria-label={added ? "Added to order" : "Add to order"}
             className="min-h-12 w-full border-primary text-primary"
           >
             {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}

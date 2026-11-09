@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Truck, Repeat, MessageCircle, ArrowRight } from "lucide-react";
-import hero from "@/assets/hero.jpg";
+import heroMobile from "@/assets/hero-mobile.webp.asset.json";
+import heroDesktop from "@/assets/hero-desktop.webp.asset.json";
 import { SiteLayout, WhatsAppButton } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { PRODUCTS, CATEGORIES, CATEGORY_INFO } from "@/lib/catalog";
@@ -32,7 +33,7 @@ function Index() {
   return (
     <SiteLayout>
       <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        <img src={hero} alt="Illustrative gadget collection for this concept" fetchPriority="high" decoding="async" width={1600} height={1104} className="absolute inset-0 h-full w-full object-cover opacity-40" />
+        <img src={heroDesktop.url} srcSet={`${heroMobile.url} 640w, ${heroDesktop.url} 1280w`} sizes="100vw" alt="Illustrative gadget collection for this concept" fetchPriority="high" decoding="async" width={1600} height={1104} className="absolute inset-0 h-full w-full object-cover opacity-40" />
         <div className="absolute inset-0 bg-primary/35" />
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:py-16">
           <p className="text-xs font-semibold text-primary-foreground">
