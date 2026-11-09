@@ -26,7 +26,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="relative aspect-[4/3] bg-muted sm:aspect-square">
         <img
           src={product.image}
-          alt={`${product.name} (illustrative photo)`}
+          alt={`Illustrative ${product.category} concept image; not a verified photo of ${product.name}`}
           loading="lazy"
           decoding="async"
           width={816}
@@ -41,6 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
         <span className="absolute right-3 top-3 rounded-md bg-background/95 px-2.5 py-1 text-xs text-muted-foreground">
           {product.family}
         </span>
+        <span className="absolute inset-x-0 bottom-0 bg-background/95 px-3 py-1.5 text-center text-xs text-muted-foreground">Concept image · exact model photo pending</span>
       </div>
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         <h3 className="font-display text-xl font-bold leading-snug">{product.name}</h3>

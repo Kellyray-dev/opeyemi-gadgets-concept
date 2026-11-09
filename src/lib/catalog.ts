@@ -1,11 +1,20 @@
-import phonePro from "@/assets/products/phone-pro-titanium.jpg";
-import phoneColor from "@/assets/products/phone-standard-color.jpg";
-import phoneClassic from "@/assets/products/phone-pro-classic.jpg";
-import phoneOlder from "@/assets/products/phone-older.jpg";
-import laptopAir from "@/assets/products/laptop-air.jpg";
-import laptopPro from "@/assets/products/laptop-pro.jpg";
-import watchSeries from "@/assets/products/watch-series.jpg";
-import watchUltra from "@/assets/products/watch-ultra.jpg";
+import phoneProAsset from "@/assets/products/phone-pro-titanium.webp.asset.json";
+import phoneColorAsset from "@/assets/products/phone-standard-color.webp.asset.json";
+import phoneClassicAsset from "@/assets/products/phone-pro-classic.webp.asset.json";
+import phoneOlderAsset from "@/assets/products/phone-older.webp.asset.json";
+import laptopAirAsset from "@/assets/products/laptop-air.webp.asset.json";
+import laptopProAsset from "@/assets/products/laptop-pro.webp.asset.json";
+import watchSeriesAsset from "@/assets/products/watch-series.webp.asset.json";
+import watchUltraAsset from "@/assets/products/watch-ultra.webp.asset.json";
+
+const phonePro = phoneProAsset.url;
+const phoneColor = phoneColorAsset.url;
+const phoneClassic = phoneClassicAsset.url;
+const phoneOlder = phoneOlderAsset.url;
+const laptopAir = laptopAirAsset.url;
+const laptopPro = laptopProAsset.url;
+const watchSeries = watchSeriesAsset.url;
+const watchUltra = watchUltraAsset.url;
 
 export type Category = "iPhone" | "MacBook" | "Apple Watch";
 export type Condition = "New" | "UK Used";
@@ -23,7 +32,7 @@ export interface Product {
   seenInInventory: boolean;
   /** Preview-only illustrative photo; replace with the shop's real photos. */
   image: string;
-  /** Latest model generation — shown in "New In". Not a stock claim. */
+  /** Curated featured selection only; neither a release-date nor a stock claim. */
   isNew: boolean;
 }
 
